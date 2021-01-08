@@ -21,7 +21,7 @@ git clone https://github.com/chaimleib/maclfs
 MLFS=$HOME/maclfs
 cd $MLFS/sources
 cat $MLFS/packages.txt $MLFS/patches.txt |
-  grep 'gawk\|sed' |
+  grep 'e2fsprogs\|gptfdisk' |
   awk '/^Download: .*:/ {print "-LJO\n" $2}' |
   xargs curl
 ```
