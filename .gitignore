@@ -1,0 +1,7 @@
+.DS_Store
+bashrc
+cross-tools/
+lfs.env
+lfs.iso
+sources/
+tools/

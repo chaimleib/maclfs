@@ -1,0 +1,114 @@
+Bash (5.1) - 10,213 KB:
+Home page: https://www.gnu.org/software/bash/
+Download: https://ftp.gnu.org/gnu/bash/bash-5.1.tar.gz
+MD5 sum: bb91a17fd6c9032c26d0b2b78b50aff5
+
+Binutils (2.35.1) - 21,515 KB:
+Home page: http://www.gnu.org/software/binutils/
+Download: https://mirrors.kernel.org/gnu/binutils/binutils-2.35.1.tar.xz
+MD5 sum: 7126f370ffbd46c08fcc5ce7aee2805d
+
+Busybox (1.32.1) - 2,376 KB:
+Home page: https://www.busybox.net/
+Downloads: https://busybox.net/downloads/busybox-1.32.1.tar.bz2
+MD5 sum: 70913edaf2263a157393af07565c17f0
+
+CLFS-Bootscripts (git master HEAD: 87cfd4f 2017-10-12) - 4 KB:
+Home page: https://github.com/cross-lfs/bootscripts-embedded
+Download: https://github.com/cross-lfs/bootscripts-embedded/archive/87cfd4f.tar.gz
+MD5 sum: 6b59e81b7cd141ae65122bc2d563f0c3
+
+Coreutils (8.32) - 5,417 KB:
+Home page: https://www.gnu.org/software/coreutils/coreutils.html
+Download: https://ftp.gnu.org/gnu/coreutils/coreutils-8.32.tar.xz
+MD5 sum: 022042695b7d5bcf1a93559a9735e668
+
+E2fsprogs (1.45.6) - 7,752 KB:
+Home page: http://e2fsprogs.sourceforge.net/
+Download: https://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.45.6.tar.gz
+MD5 sum: cccfb706d162514e4f9dbfbc9e5d65ee
+
+Findutils (4.7.0) - 1,850 KB:
+Home page: https://www.gnu.org/software/findutils/findutils.html
+Download: https://ftp.gnu.org/pub/gnu/findutils/findutils-4.7.0.tar.xz
+MD5 sum: 731356dec4b1109b812fecfddfead6b2
+
+Gawk (5.1.0) - 3,081 KB:
+Home page: http://www.gnu.org/software/gawk/
+Download: http://ftp.gnu.org/gnu/gawk/gawk-5.1.0.tar.xz
+MD5 sum: 8470c34eeecc41c1aa0c5d89e630df50
+
+GCC (10.2.0) - 73,247 KB:
+Home page: https://gcc.gnu.org/
+Download: http://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz
+MD5 sum: e9fd9b1789155ad09bcf3ae747596b50
+
+# Glibc (2.32) - 16,352 KB:
+# Home page: https://www.gnu.org/software/libc/
+# Download: https://ftp.gnu.org/gnu/libc/glibc-2.32.tar.xz
+# MD5 sum: 720c7992861c57cf97d66a2f36d8d1fa
+
+GMP (6.2.1) - 1,973 KB:
+Home page: http://www.gnu.org/software/gmp/
+Download: http://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz
+MD5 sum: 03a31d8cbaf29d136252f8f38875ed82
+
+GPT Fdisk (1.0.5) - 201 KB:
+Home page: https://sourceforge.net/projects/gptfdisk/
+Download: https://prdownloads.sourceforge.net/gptfdisk/gptfdisk-1.0.5.tar.gz
+MD5 sum: 58dac67c85e46ca87b587231549aefe6
+
+iana-etc (20201229) - 578 KB:
+Home page: https://github.com/Mic92/iana-etc
+Download: https://github.com/Mic92/iana-etc/releases/download/20201229/iana-etc-20201229.tar.gz
+MD5 sum: 19f35177c0bd701f4e52bfc9ce068f5d
+
+ISL (0.23) - 1,689 KB:
+Home page: http://isl.gforge.inria.fr/
+Download: http://isl.gforge.inria.fr/isl-0.23.tar.xz
+MD5 sum: cc8155dfe8550e59299a2368dbaa7d04
+
+Linux (5.10.4) - 113,880 KB:
+Home page: https://www.kernel.org/
+Download: https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.4.tar.xz
+MD5 sum: 650f047a5fc947276ef6ae513b773c9b
+
+MPC (1.2.1) - 819 KB:
+Home page: http://www.multiprecision.org/
+Download: https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz
+MD5 sum: 9f16c976c25bb0f76b50be749cd7a3a8
+
+MPFR (4.1.0) - 1,490 KB:
+Home page: https://www.mpfr.org/
+Download: http://www.mpfr.org/mpfr-4.1.0/mpfr-4.1.0.tar.xz
+MD5 sum: bdd3d5efba9c17da8d83a35ec552baef
+
+Musl (1.2.1) - 1,023 KB:
+Home page: https://musl.libc.org/
+Download: https://musl.libc.org/releases/musl-1.2.1.tar.gz
+MD5 sum: 2720bdbed739e94c4d7acdc91c0cd9d6
+
+Pkg-config (0.29.2) - 1,970 KB:
+Home page: https://www.freedesktop.org/wiki/Software/pkg-config
+Download: https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
+MD5 sum: f6e931e319531b736fadc017f470e68a
+
+Readline (8.1) - 2,923 KB
+Home page: https://tiswww.case.edu/php/chet/readline/rltop.html
+Download: ftp://ftp.cwru.edu/pub/bash/readline-8.1.tar.gz
+MD5 sum: e9557dd5b1409f5d7b37ef717c64518e
+
+Sed (4.8) - 1,317 KB:
+Home page: http://www.gnu.org/software/sed/
+Download: http://ftp.gnu.org/gnu/sed/sed-4.8.tar.xz
+MD5 sum: 6d906edfdb3202304059233f51f9a71d
+
+Vim (8.2.2301) - 15,026 KB:
+Home page: https://www.vim.org/
+Download: https://github.com/vim/vim/archive/v8.2.2301.tar.gz
+MD5 sum: 318ec719810d92e8ccc45e4bf2f53929
+
+Wget (1.21) - 2,299 KB:
+Home page: https://www.gnu.org/software/wget/
+Download: http://ftpmirror.gnu.org/wget/wget-1.21.tar.lz
+MD5 sum: c10e69697250635fa2275ed0ab4e9439

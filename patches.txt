@@ -1,0 +1,4 @@
+Musl (CVE-2020-28928) - 1 KB
+Homepage: https://www.openwall.com/lists/musl/2020/11/19/1
+Download: https://www.openwall.com/lists/musl/2020/11/19/1/1
+MD5 sum: f74be9ba50cbbec7c8ec5a48e9dde019
