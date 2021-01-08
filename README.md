@@ -39,9 +39,9 @@ Create the folder tree for the tools needed to create a linux disk, and set up
 the environment variables.
 
 ```bash
-mkdir -pv $LFS/tools/{bin,share/man/man8}
-PATH=$LFS/tools/bin:$PATH
-MANPATH=$LFS/tools/share/man:$MANPATH
+mkdir -pv $MLFS/tools/{bin,share/man/man8}
+PATH=$MLFS/tools/bin:$PATH
+MANPATH=$MLFS/tools/share/man:$MANPATH
 ```
 
 The following commands assume for brevity that the given package has been downloaded and
