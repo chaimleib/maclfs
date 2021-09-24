@@ -23,10 +23,10 @@ Home page: https://www.gnu.org/software/coreutils/coreutils.html
 Download: https://ftp.gnu.org/gnu/coreutils/coreutils-8.32.tar.xz
 MD5 sum: 022042695b7d5bcf1a93559a9735e668
 
-E2fsprogs (1.45.6) - 7,752 KB:
+E2fsprogs (1.46.4) - 9,297 KB:
 Home page: http://e2fsprogs.sourceforge.net/
-Download: https://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.45.6.tar.gz
-MD5 sum: cccfb706d162514e4f9dbfbc9e5d65ee
+Download: https://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.46.4.tar.gz
+MD5 sum: 128f5b0f0746b28d1e3ca7e263c57094
 
 Findutils (4.7.0) - 1,850 KB:
 Home page: https://www.gnu.org/software/findutils/findutils.html
@@ -53,10 +53,10 @@ Home page: http://www.gnu.org/software/gmp/
 Download: http://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz
 MD5 sum: 03a31d8cbaf29d136252f8f38875ed82
 
-GPT Fdisk (1.0.5) - 201 KB:
+GPT Fdisk (1.0.8) - 256 KB:
 Home page: https://sourceforge.net/projects/gptfdisk/
-Download: https://prdownloads.sourceforge.net/gptfdisk/gptfdisk-1.0.5.tar.gz
-MD5 sum: 58dac67c85e46ca87b587231549aefe6
+Download: https://prdownloads.sourceforge.net/gptfdisk/gptfdisk-1.0.8.tar.gz
+MD5 sum: 74684c4eb0e6d5a1839e4bb0bba36fa2
 
 iana-etc (20201229) - 578 KB:
 Home page: https://github.com/Mic92/iana-etc

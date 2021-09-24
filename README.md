@@ -3,148 +3,86 @@
 The goal of this project is to cross compile Linux on a Mac host. The only requirements are:
 
 * Xcode command line tools
+* [Homebrew](https://brew.sh)
 * [Paragon extFS for Mac](https://www.paragon-software.com/home/extfs-mac/)
   ($39.95), or some other method of mounting and modifying an ext4 volume
 
 This guide is based on [Cross LFS - Embedded
 x86](https://clfs.org/view/clfs-embedded/x86/), but has been updated to use the
-latest packages as of 2021-01-08.
+latest packages as of 2021-01-08. The disk formatting tools were updated
+2021-09-24.
 
-# Download the packages and patches
+# Set up environment
 
-macOS does not come with `wget`, but rather than compile it, it is faster
-to press `awk`, `xargs` and `curl` into service.
+To create the boot disk, we need `gptfdisk` and `e2fsprogs`. It is also a
+little easier to type `wget` rather than `curl -LJO`.
+
+> In case you still decide to use `curl` instead of `wget`, `-LJO` must precede
+> each URL sent to `curl`. `L` means to follow redirects, and `O` means to save
+> a file with an automatically-determined name. However, the default is to
+> figure out the name from the URL which is not always the original file name.
+> `J` says to use the name provided in the response headers.
+
+```bash
+brew install gptfdisk e2fsprogs wget
+```
+
+> `Parted` depends on glibc and does not compile under macOS. Compiling `gdisk`
+> and `sgdisk` from source requires the brew packages `ossp-uuid` and `popt`.
+> However, I favored speed at this stage, since the goal is to learn about
+> Linux, rather than macOS.
 
 ```bash
 cd ~
 git clone https://github.com/chaimleib/maclfs
-MLFS=$HOME/maclfs
-cd $MLFS/sources
-cat $MLFS/packages.txt $MLFS/patches.txt |
-  grep 'e2fsprogs\|gptfdisk' |
-  awk '/^Download: .*:/ {print "-LJO\n" $2}' |
-  xargs curl
-```
-
-`-LJO` must precede each URL sent to `curl`. `L` means to follow
-redirects, and `O` means to save a file with an automatically-determined
-name. However, the default is to figure out the name from the URL which is
-not always the original file name. `J` says to use the name provided in
-the response headers.
-
-
-# Tools for creating the boot disk
-
-Create the folder tree for the tools needed to create a linux disk, and set up
-the environment variables.
-
-```bash
-mkdir -pv $MLFS/tools/{bin,share/man/man8}
-PATH=$MLFS/tools/bin:$PATH
-MANPATH=$MLFS/tools/share/man:$MANPATH
-```
-
-The following commands assume for brevity that the given package has been downloaded and
-expanded, and that we have changed directories into the resulting folder.
-Afterwards, we should return to the `sources` directory and the package folder
-should be deleted. For example:
-
-```
-tar -xf <package tarball>
-cd <package folder>
-# package install commands
-cd $MLFS/sources
-rm -rf <package folder>
-```
-
-## GPT Fdisk
-We will use `gdisk` from this package later to partition our disk and assign
-partition types.
-
-```bash
-make -f Makefile.mac gdisk
-cp -v gdisk $MLFS/tools/bin
-cp -v gdisk.8 $MLFS/tools/share/man/man8
-```
-
-## E2fsprogs
-We will need `mke2fs` from this package to format our disk as ext4.
-
-First, we need to fix an issue with `loff_t` on macOS (credit to `brew edit
-e2fsprogs`). Since we are using BSD sed at this point, in-place edits require
-`-i ''`, instead of GNU-style `-i` alone.
-
-```bash
-sed -i '' s/loff_t/off_t/ lib/ext2fs/imager.c misc/e2fuzz.c
-```
-
-The package docs recommend building in a subdirectory:
-
-```bash
-mkdir -v build
-cd build
-```
-
-Configure, build and install to our tools directory.
-
-```bash
-../configure --prefix=$MLFS/tools
-make
-make install
+cd maclfs
 ```
 
 # Creating the target disk
 
 ```bash
 # create a blank 15GB file
-dd bs=1024 if=/dev/zero of=$MLFS/lfs.iso count=15728540
+dd bs=4096 if=/dev/zero of=lfs.iso count=15728540
 
 # create loopback device from blank file, and remember the device name
 # In case you need to run this command again after a reboot and other
 # partitions exist already, the `; exit` to awk behaves like `head -n1` to grab
 # just the disk device name and not partition device names.
-lfsDev=$(hdiutil attach -imagekey diskimage-class=CRawDiskImage -nomount $MLFS/lfs.iso |
+lfsDev=$(hdiutil attach -imagekey diskimage-class=CRawDiskImage -nomount lfs.iso |
   awk '{print $1; exit}')
 
 # partition the disk
-./gdisk $lfsDev
-```
-
-Use GPT partitioning. First partition should be 200MB EFI. Rest should be ext4.
-
-```
-o     create GPT disk
-y     confirm
-
-n     create new partition
-1     partition number
-      default first sector of 2048
-+200M size
-ef00  type code (EFI)
-
-n     create new partition
-2     partition number
-      default first sector (after previous)
-      default last sector
-8304  type code (Linux x86-64 root)
-
-w     write changes
-y     confirm
+# -g                   Use GPT partitioning
+# -n 1::+200M -t ef00  First partition should be 200MB EFI
+# -n 2:: -t 8304       Rest should be ext4
+# -c 2:'LFS Disk'      Name the main partition
+sgdisk $lfsDev -g -n 1::+200M -t ef00 -n 2:: -t 8304
 ```
 
 Now you have the necessary partition locations, but they aren't formatted yet.
 
 ```bash
 # if you wish, verify the partitions.
-diskutil list $lfsDev
-# /dev/disk4 (disk image):
-#   #:                       TYPE NAME                    SIZE       IDENTIFIER
-#   0:      GUID_partition_scheme                        +15.0  GB   disk4
-#   1:                        EFI                         209.7 MB   disk4s1
-#   2: 4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709               14.8 GB    disk4s2
+sgdisk -p $lfsDev
 
-# not installing, in order to avoid altering host system. Just run in-place
-misc/mke2fs -t ext4 -L lfs ${lfsDev}s2
+Disk /dev/disk2: 31457080 sectors, 15.0 GiB
+Sector size (logical): 512 bytes
+Disk identifier (GUID): 87317754-AF95-4293-83D0-1F9F128FAA71
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 31457046
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 2014 sectors (1007.0 KiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048          411647   200.0 MiB   EF00
+   2          411648        31457046   14.8 GiB    8304  LFS Disk
+```
+
+Now, format the main partition.
+
+```bash
+mke2fs -t ext4 -L lfsdisk ${lfsDev}s2
 ```
 
 Install extFS for Mac by Paragon Software ($39.95 or Free 10-day trial) to
@@ -157,11 +95,11 @@ again:
 
 ```bash
 lfsDev=$( \
-  hdiutil attach -imagekey diskimage-class=CRawDiskImage -nomount $HOME/lfs/lfs.iso |
+  hdiutil attach -imagekey diskimage-class=CRawDiskImage -nomount lfs.iso |
   awk '{print $1; exit}')
 ```
 
-Then, extFS should be able to mount it. Rename the drive as `lfsdisk`.
+Then, extFS should be able to mount it.
 
 
 # Build directory, Packages and Patches
@@ -226,6 +164,10 @@ mkdir -pv $LFS/cross-tools/lib/pkgconfig
 ```
 
 ## Prereqs for linux headers
+
+The following commands assume that you have downloaded, decompressed and cd-ed
+into the packages listed in packages.txt. Some packages also require
+corresponding patches in patches.txt.
 
 ### Musl (headers only)
 To compile the kernel headers, we first need some header files from musl so
