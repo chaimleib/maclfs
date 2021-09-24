@@ -8,7 +8,7 @@ The goal of this project is to cross compile Linux on a Mac host. The only requi
 
 This guide is based on [Cross LFS - Embedded
 x86](https://clfs.org/view/clfs-embedded/x86/), but has been updated to use the
-latest packages as of 2020-01-08.
+latest packages as of 2021-01-08.
 
 # Download the packages and patches
 
