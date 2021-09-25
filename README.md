@@ -198,44 +198,13 @@ make ARCH=$LFS_ARCH INSTALL_HDR_PATH=$LFS/cross-tools/$LFS_TGT headers_install
 >
 > Since kernel version 5.5, `make headers_check` has been a no-op.
 
-### Gawk
-We also need GNU's version of awk.
-
-```bash
-./configure --prefix=$MLFS/cross-tools
-make
-make install
-```
-
-### Musl (headers only)
-To compile the kernel headers, we first need some header files from musl so
-that the host compiler sees them.
-
-> At this stage, it is not possible to use Glibc because it expects a Linux
-> host and the build system has not been ported to macOS. The porting effort
-> would require installing wget, gawk, gnu sed, and coreutils, and then
-> wrapping macOS's as and ld or compiling them to respond to GNU-style flags.
-> Rather than attempt a port, we'll first build using musl, which works
-> relatively easily under macOS.
-
-```bash
-./configure --prefix=$LFS/cross-tools
-make install-headers
-cp -r $LFS/cross-tools/include/{bits,{byteswap,elf,endian,features}.h} /usr/local/include
-
-# avoid "typedef redefinition with different types" error with macOS headers
-sed -i '' '/typedef unsigned _Int64 uint64_t/d' /usr/local/include/bits/alltypes.h
-```
-
-Since we haven't installed GNU sed yet, the `-i` flag requires a value of `''`.
-
 ## Binutils
 
 ```bash
 mkdir -v build
 cd build
 ../configure \
-   --prefix=$LFS/cross-tools \
+   --prefix=$LFS/cross-tools/$LFS_TGT \
    --target=$LFS_TGT \
    --with-sysroot=$LFS/cross-tools/$LFS_TGT \
    --disable-nls \
@@ -243,6 +212,17 @@ cd build
 make configure-host
 make
 make install
+```
+
+### Musl (headers only)
+
+```bash
+./configure --prefix=$LFS/cross-tools
+make install-headers
+cp -r $LFS/cross-tools/include/{bits,{byteswap,elf,endian,features}.h} /usr/local/include
+
+# avoid "typedef redefinition with different types" error with macOS headers
+sed -i '/typedef unsigned _Int64 uint64_t/d' /usr/local/include/bits/alltypes.h
 ```
 
 ## GCC (static)
