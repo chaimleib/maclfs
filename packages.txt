@@ -1,12 +1,12 @@
-Bash (5.1) - 10,213 KB:
+Bash (5.1.8) - 10,598 KB:
 Home page: https://www.gnu.org/software/bash/
-Download: https://ftp.gnu.org/gnu/bash/bash-5.1.tar.gz
-MD5 sum: bb91a17fd6c9032c26d0b2b78b50aff5
+Download: https://ftp.gnu.org/gnu/bash/bash-5.1.8.tar.gz
+MD5 sum: 23eee6195b47318b9fd878e590ccb38c
 
-Binutils (2.35.1) - 21,515 KB:
+Binutils (2.37) - 23,112 KB:
 Home page: http://www.gnu.org/software/binutils/
-Download: https://mirrors.kernel.org/gnu/binutils/binutils-2.35.1.tar.xz
-MD5 sum: 7126f370ffbd46c08fcc5ce7aee2805d
+Download: https://mirrors.kernel.org/gnu/binutils/binutils-2.37.tar.xz
+MD5 sum: e78d9ff2976b745a348f4c1f27c77cb1
 
 Busybox (1.32.1) - 2,376 KB:
 Home page: https://www.busybox.net/
@@ -38,10 +38,10 @@ Home page: http://www.gnu.org/software/gawk/
 Download: http://ftp.gnu.org/gnu/gawk/gawk-5.1.0.tar.xz
 MD5 sum: 8470c34eeecc41c1aa0c5d89e630df50
 
-GCC (10.2.0) - 73,247 KB:
+GCC (11.2.0) - 82,268 KB:
 Home page: https://gcc.gnu.org/
-Download: http://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz
-MD5 sum: e9fd9b1789155ad09bcf3ae747596b50
+Download: http://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz
+MD5 sum: 31c86f2ced76acac66992eeedce2fce2
 
 # Glibc (2.32) - 16,352 KB:
 # Home page: https://www.gnu.org/software/libc/
@@ -68,10 +68,10 @@ Home page: http://isl.gforge.inria.fr/
 Download: http://isl.gforge.inria.fr/isl-0.23.tar.xz
 MD5 sum: cc8155dfe8550e59299a2368dbaa7d04
 
-Linux (5.10.4) - 113,880 KB:
+Linux (5.13.12) - 131,116 KB:
 Home page: https://www.kernel.org/
-Download: https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.4.tar.xz
-MD5 sum: 650f047a5fc947276ef6ae513b773c9b
+Download: https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.13.12.tar.xz
+MD5 sum: 6e1728b2021ca19cc9273f080e6c44c7
 
 MPC (1.2.1) - 819 KB:
 Home page: http://www.multiprecision.org/
@@ -83,10 +83,10 @@ Home page: https://www.mpfr.org/
 Download: http://www.mpfr.org/mpfr-4.1.0/mpfr-4.1.0.tar.xz
 MD5 sum: bdd3d5efba9c17da8d83a35ec552baef
 
-Musl (1.2.1) - 1,023 KB:
+Musl (1.2.2) - 1,030 KB:
 Home page: https://musl.libc.org/
-Download: https://musl.libc.org/releases/musl-1.2.1.tar.gz
-MD5 sum: 2720bdbed739e94c4d7acdc91c0cd9d6
+Download: https://musl.libc.org/releases/musl-1.2.2.tar.gz
+MD5 sum: aed8ae9e2b0898151b36a204088292dd
 
 Pkg-config (0.29.2) - 1,970 KB:
 Home page: https://www.freedesktop.org/wiki/Software/pkg-config

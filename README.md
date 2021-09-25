@@ -7,36 +7,33 @@ The goal of this project is to cross compile Linux on a Mac host. The only requi
 * [Paragon extFS for Mac](https://www.paragon-software.com/home/extfs-mac/)
   ($39.95), or some other method of mounting and modifying an ext4 volume
 
-This guide is based on [Cross LFS - Embedded
-x86](https://clfs.org/view/clfs-embedded/x86/), but has been updated to use the
-latest packages as of 2021-01-08. The disk formatting tools were updated
+This guide is based on [Linux from
+Scratch](https://linuxfromscratch.org/view/lfs/), [Cross LFS - Embedded
+x86](https://clfs.org/view/clfs-embedded/x86/) and [dslm4515's
+Musl-LFS](https://github.com/dslm4515/Musl-LFS/blob/master/doc). I updated to
+the latest packages as of 2021-01-08. The disk formatting tools were updated
 2021-09-24.
 
 # Set up environment
 
-To create the boot disk, we need `gptfdisk` and `e2fsprogs`. It is also a
-little easier to type `wget` rather than `curl -LJO`.
-
-> In case you still decide to use `curl` instead of `wget`, `-LJO` must precede
-> each URL sent to `curl`. `L` means to follow redirects, and `O` means to save
-> a file with an automatically-determined name. However, the default is to
-> figure out the name from the URL which is not always the original file name.
-> `J` says to use the name provided in the response headers.
+> `Parted` depends on glibc, which does not compile under macOS (dunno about
+> musl). Compiling `gdisk` and `sgdisk` from source requires the brew packages
+> `ossp-uuid` and `popt`.  However, rather than descend into the dependencies
+> and make the project independent of `brew`, I favored speed at this stage,
+> since the goal is to learn about Linux, rather than macOS.
 
 ```bash
-brew install gptfdisk e2fsprogs wget
-```
-
-> `Parted` depends on glibc and does not compile under macOS. Compiling `gdisk`
-> and `sgdisk` from source requires the brew packages `ossp-uuid` and `popt`.
-> However, I favored speed at this stage, since the goal is to learn about
-> Linux, rather than macOS.
-
-```bash
-cd ~
 git clone https://github.com/chaimleib/maclfs
 cd maclfs
 ```
+
+To create the boot disk, we need `gptfdisk` and `e2fsprogs`. Building the
+header files will require GNU's version of sed.
+
+```bash
+brew install gptfdisk e2fsprogs gsed
+```
+
 
 # Creating the target disk
 
@@ -111,6 +108,21 @@ LFS=/Volumes/lfsdisk
 sudo chmod 777 $LFS
 ```
 
+Create a directory that will hold the tools we need before we chroot or boot
+the new linux system. In other words, the tools in this folder will be used
+from macOS.
+
+```bash
+mkdir -pv $LFS/cross-tools/{bin,lib/pkgconfig}
+```
+
+Remember installing `gsed` a while back? Make a link to it named `sed` in our
+cross-tools, so that it is available when we isolate our PATH variable:
+
+```bash
+ln -s /usr/local/bin/gsed $LFS/cross-tools/bin/sed
+```
+
 Create a bashrc:
 
 ```bash
@@ -120,14 +132,14 @@ umask 022
 MLFS=$HOME/maclfs
 LFS=/Volumes/lfsdisk
 LC_ALL=POSIX
-PATH=$LFS/cross-tools/bin:/bin:/usr/bin
+PATH=$LFS/cross-tools/bin:$LFS/cross-tools/$LFS_TGT/bin:/bin:/usr/bin
 MANPATH=$LFS/cross-tools/share/man:$MANPATH
 PKG_CONFIG_PATH=$LFS/cross-tools/lib/pkgconfig
 export MLFS LFS LC_ALL PATH MANPATH PKG_CONFIG_PATH
 unset CFLAGS
 
-export LFS_HOST=$(echo $MACHTYPE | sed 's/-[^-]*/-cross/')
-export LFS_TGT=x86_64-unknown-linux
+export LFS_HOST="$MACHTYPE-cross-darwin"
+export LFS_TGT=x86_64-mlfs-linux-musleabihf
 export BUILD64=-m64
 export LFS_CPU=k8-sse3
 export LFS_ARCH=x86_64
@@ -151,23 +163,49 @@ chmod +x $MLFS/lfs.env
 $MLFS/lfs.env
 ```
 
+If you ever need to exit the new environment, type `exit`. To re-enter it, run `$MLFS/lfs.env`.
 
 # Cross toolchain
 
-Create a directory that will hold the tools we need before we chroot or boot
-the new linux system. In other words, the tools in this folder will be used
-from macOS.
-
-```bash
-mkdir -pv $LFS/cross-tools
-mkdir -pv $LFS/cross-tools/lib/pkgconfig
-```
-
 ## Prereqs for linux headers
+
+Instead of `wget`, use `curl -LJO` to download each URL in packages.txt and patches.txt.
+
+> On 2021-09-24, I had HTTPS certificate issues with kernel.org and other
+> source mirrors. For now, using `curl` works around it. Otherwise, I would
+> have installed `wget` earlier, linked that and used it instead.
+>
+> `-LJO` must precede each URL sent to `curl`. `L` means to follow redirects,
+> and `O` means to save a file with an automatically-determined name. However,
+> the default is to figure out the name from the URL which is not always the
+> original file name.  `J` says to use the name provided in the response
+> headers.
 
 The following commands assume that you have downloaded, decompressed and cd-ed
 into the packages listed in packages.txt. Some packages also require
 corresponding patches in patches.txt.
+
+## Linux (headers only)
+Now make the linux headers.
+
+```bash
+make mrproper
+make ARCH=$LFS_ARCH headers
+make ARCH=$LFS_ARCH INSTALL_HDR_PATH=$LFS/cross-tools/$LFS_TGT headers_install
+```
+
+> The above command failed to work on an HFS+ disk, and only succeeded inside the ext4 disk image.
+>
+> Since kernel version 5.5, `make headers_check` has been a no-op.
+
+### Gawk
+We also need GNU's version of awk.
+
+```bash
+./configure --prefix=$MLFS/cross-tools
+make
+make install
+```
 
 ### Musl (headers only)
 To compile the kernel headers, we first need some header files from musl so
@@ -180,12 +218,6 @@ that the host compiler sees them.
 > Rather than attempt a port, we'll first build using musl, which works
 > relatively easily under macOS.
 
-Apply this security patch for a rarely-used function:
-
-```bash
-patch -Np1 -i ../wcsnrtombs_cve_2020_28928_diff.txt
-```
-
 ```bash
 ./configure --prefix=$LFS/cross-tools
 make install-headers
@@ -196,36 +228,6 @@ sed -i '' '/typedef unsigned _Int64 uint64_t/d' /usr/local/include/bits/alltypes
 ```
 
 Since we haven't installed GNU sed yet, the `-i` flag requires a value of `''`.
-
-### Sed
-Also, we need the GNU version of sed. The version that comes with macOS is
-missing certain options that are expected in certain configure scripts.
-
-```bash
-./configure --prefix=$LFS/cross-tools
-make
-make install
-```
-
-### Gawk
-We also need GNU's version of awk.
-
-```bash
-./configure --prefix=$MLFS/cross-tools
-make
-make install
-```
-
-## Linux (headers only)
-Now make the linux headers.
-
-```bash
-make mrproper
-make ARCH=$LFS_ARCH headers_check
-make ARCH=$LFS_ARCH INSTALL_HDR_PATH=$LFS/cross-tools/$LFS_TGT headers_install
-```
-
-> The above command failed to work on an HFS+ disk, and only succeeded inside the ext4 disk image.
 
 ## Binutils
 
