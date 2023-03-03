@@ -76,10 +76,11 @@ Number  Start (sector)    End (sector)  Size       Code  Name
    2          411648        31457046   14.8 GiB    8304  LFS Disk
 ```
 
-Now, format the main partition.
+Now, format the main partition. Homebrew stopped linking the e2fsprogs into the
+PATH, so specify the full path to the binary:
 
 ```bash
-mke2fs -t ext4 -L lfsdisk ${lfsDev}s2
+/opt/homebrew/opt/e2fsprogs/sbin/mke2fs -t ext4 -L lfsdisk ${lfsDev}s2
 ```
 
 Install extFS for Mac by Paragon Software ($39.95 or Free 10-day trial) to
